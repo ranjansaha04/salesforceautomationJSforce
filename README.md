@@ -1,1 +1,1 @@
-# salesforceautomationJSforce
+# Automate Salesforce actions using JSforce

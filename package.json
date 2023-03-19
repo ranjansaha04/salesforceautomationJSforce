@@ -1,0 +1,18 @@
+{
+  "name": "salesforce-automation",
+  "version": "1.0.0",
+  "description": "automatesalesforceactions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ranjansaha",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.4",
+    "fs": "^0.0.1-security",
+    "jsforce": "^1.11.0",
+    "prompt-sync": "^4.2.0",
+    "request": "^2.88.2"
+  }
+}
