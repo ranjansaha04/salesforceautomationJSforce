@@ -25,7 +25,7 @@ extracted folder/           # Root directory.
 ```
 
 ### Setup
-Run *npm install* in the root directory. *e.g. ...\Downloads\salesforceautomationJSforce-main>npm install*
+Run `npm install` in the root directory. `e.g. ...\Downloads\salesforceautomationJSforce-main>npm install`
 You should see the folder has a new folder named `node_modules`
 ```
 extracted folder/           # Root directory.
@@ -37,8 +37,8 @@ extracted folder/           # Root directory.
 
 ```
 
-Edit the *config.json* file to set environment variables:
-```json
+Edit the `config.json` file to set environment variables:
+```md
 ---
 {
 	"env" : {
@@ -66,7 +66,7 @@ countrystateautomation/  # current directory.
 |- app.js                # node application file
 
 ```
-Run *node app.js* command in the countrystateautomation directory. *e.g. ...\Downloads\salesforceautomationJSforce-main\countrystateautomation>node app.js*
+Run `node app.js` command in the countrystateautomation directory. `e.g. ...\Downloads\salesforceautomationJSforce-main\countrystateautomation>node app.js`
 Terminal promts with below prompt. Enter y to proceed
 ```
 ---
