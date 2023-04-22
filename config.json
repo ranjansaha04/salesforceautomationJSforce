@@ -1,0 +1,16 @@
+{
+	"env" : {
+		"SF_USER_NAME" : {
+			"description" : "SF_USER_NAME",
+			"value" : ""
+		},
+		"SF_USER_PASSWORD" : {
+			"description" : "SF_USER_PASSWORD",
+			"value" : ""
+		},
+		"SF_LOGIN_URL" : {
+			"description" : "SF_LOGIN_URL",
+			"value" : "https://login.salesforce.com"
+		}
+	}
+}

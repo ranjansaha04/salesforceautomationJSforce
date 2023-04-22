@@ -16,7 +16,7 @@ async function start() {
 	//prompt to confirm
 	let confirm = prompt('Is this OK? (y or n)');
 	if(confirm === 'y') {
-		await login();
+		await login();		
 		await doAction();
 	}
 }
@@ -27,16 +27,49 @@ async function login() {
 }
 
 async function doAction() {
-	var fullNames = ['Address'];
-    connection.metadata.read('AddressSettings', fullNames, function(err, metadata) {
-	if (err) { console.error(err); }
-	console.log("Full Name: " + metadata.fullName);
-	var countries = metadata.countriesAndStates.countries;
-	for (var i=0; i < countries.length; i++) {
-		var country = countries[i];
-		console.log("Actve " + country.active);
-		console.log("IntegrationValue " + country.integrationValue	);
-		console.log("isoCode " + country.isoCode);
+	//map of country isoCode to integrationValue
+	const activeCountryMap = new Map();
+	//path to JSON file 
+	var activeCountries = JSON.parse(fs.readFileSync('activeCountries.json'));
+	for (const element of activeCountries) {
+	  activeCountryMap.set(element.isoCode,element.integrationValue);
 	}
+	
+	var fullNames = ['Address'];
+	var retrievedMetadata = {};
+    connection.metadata.read('AddressSettings', fullNames, function(err, metadata) {
+		if (err) { console.error(err); }
+		retrievedMetadata = metadata;
+		for (var i=0; i < retrievedMetadata.countriesAndStates.countries.length; i++) {
+			var country = retrievedMetadata.countriesAndStates.countries[i];
+			//override integration value.
+			retrievedMetadata.countriesAndStates.countries[i].integrationValue = activeCountryMap.has(country.isoCode) ? activeCountryMap.get(country.isoCode) : country.isoCode; 
+			//active flag is of type String
+			retrievedMetadata.countriesAndStates.countries[i].active = activeCountryMap.has(country.isoCode) ? 'true' : 'false';
+			retrievedMetadata.countriesAndStates.countries[i].visible = activeCountryMap.has(country.isoCode);
+			//not all countries would have states configured by default
+			if(retrievedMetadata.countriesAndStates.countries[i].states !== undefined){
+				for (var j=0; j < retrievedMetadata.countriesAndStates.countries[i].states.length; j++) {
+					//active flag is of type String
+					if(country.active == 'true') {
+						retrievedMetadata.countriesAndStates.countries[i].states[j].active = 'true';
+						retrievedMetadata.countriesAndStates.countries[i].states[j].visible = true;
+					}
+					else {
+						retrievedMetadata.countriesAndStates.countries[i].states[j].active = 'false';
+						retrievedMetadata.countriesAndStates.countries[i].states[j].visible = false;
+					}
+				}
+			}
+		}
+		
+		fs.writeFile('output.json',JSON.stringify(retrievedMetadata),'utf8', function(err){
+			if(err) {console.log("error while writing to file");}
+		});
+		//perform metadata update
+		connection.metadata.update('AddressSettings', retrievedMetadata, function(err, results) {
+			if(err) { console.error(err);}
+			console.log("results" + JSON.stringify(results));			
+		});
 	});
 }
